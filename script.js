@@ -78,29 +78,8 @@ async function startCamera() {
     }
 }
         
-        // 將視訊串流連接到 video 元素
-        video.srcObject = stream;
-        
-        // 初始化 Teachable Machine 的 webcam 物件
-        webcam = new tmImage.Webcam(224, 224, true);
-        await webcam.addChannel(stream, true);
-        await webcam.play();
-        
-        // 更新按鈕狀態
-        document.getElementById('startBtn').disabled = true;
-        document.getElementById('stopBtn').disabled = false;
-        document.getElementById('captureBtn').disabled = false;
-        
-        // 開始實時預測（可選，會不斷更新結果）
-        startPrediction();
-        
-        console.log('✓ 攝影機已開啟');
-        
-    } catch (error) {
-        console.error('❌ 攝影機開啟失敗:', error);
-        alert('❌ 無法開啟攝影機，請確認已授予權限');
-    }
-}
+
+
 
 // ========================================
 // 關閉攝影機
