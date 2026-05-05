@@ -46,26 +46,37 @@ async function init() {
 // ========================================
 async function startCamera() {
     console.log('開啟攝影機...');
-    
+
     if (!modelLoaded) {
-        alert('❌ 模型還未載入，請稍候');
+        alert('❌ 模型還未載入');
         return;
     }
-    
+
     try {
-        // 取得 video 元素
         const video = document.getElementById('webcam');
-        
-        // 要求使用者允許使用攝影機
-        // 參數說明：
-        // - video: true 表示使用後置攝影機
-        // - audio: false 表示不需要音訊
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: 'environment' // 使用後置攝影機（適合拍攝物品）
-            },
-            audio: false
-        });
+
+        // ✅ 正確用法（只用 Teachable Machine）
+        webcam = new tmImage.Webcam(224, 224, true);
+        await webcam.setup({ facingMode: "environment" });
+        await webcam.play();
+
+        // 把畫面顯示在 <video>
+        video.srcObject = webcam.webcam.srcObject;
+
+        // 更新按鈕狀態
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('stopBtn').disabled = false;
+        document.getElementById('captureBtn').disabled = false;
+
+        startPrediction();
+
+        console.log('✓ 攝影機已開啟');
+
+    } catch (error) {
+        console.error('❌ 攝影機開啟失敗:', error);
+        alert('❌ 無法開啟攝影機，請確認權限');
+    }
+}
         
         // 將視訊串流連接到 video 元素
         video.srcObject = stream;
