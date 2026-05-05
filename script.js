@@ -5,6 +5,8 @@ let model; // Teachable Machine 模型
 let webcam; // 攝影機實例
 let maxPredictions; // 分類數量
 let modelLoaded = false; // 模型是否已載入
+let stream = null;
+let predicting = false;
 
 // ========================================
 // 初始化 - 頁面載入時執行
@@ -55,26 +57,28 @@ async function startCamera() {
     try {
         const video = document.getElementById('webcam');
 
-        // ✅ 正確用法（只用 Teachable Machine）
-        webcam = new tmImage.Webcam(224, 224, true);
-        await webcam.setup({ facingMode: "environment" });
-        await webcam.play();
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: { ideal: "environment" }
+            },
+            audio: false
+        });
 
-        // 把畫面顯示在 <video>
-        video.srcObject = webcam.webcam.srcObject;
+        video.srcObject = stream;
+        await video.play();
 
-        // 更新按鈕狀態
         document.getElementById('startBtn').disabled = true;
         document.getElementById('stopBtn').disabled = false;
         document.getElementById('captureBtn').disabled = false;
 
+        predicting = true;
         startPrediction();
 
         console.log('✓ 攝影機已開啟');
 
     } catch (error) {
         console.error('❌ 攝影機開啟失敗:', error);
-        alert('❌ 無法開啟攝影機，請確認權限');
+        alert('❌ 無法開啟攝影機，請確認 Safari 是否允許相機權限');
     }
 }
         
@@ -84,27 +88,24 @@ async function startCamera() {
 // ========================================
 // 關閉攝影機
 // ========================================
-async function stopCamera() {
+function stopCamera() {
     console.log('關閉攝影機...');
-    
-    // 停止攝影機
-    if (webcam) {
-        webcam.stop();
-    }
-    
-    // 清除 video 標籤的串流
+
+    predicting = false;
+
     const video = document.getElementById('webcam');
-    if (video.srcObject) {
-        const tracks = video.srcObject.getTracks();
-        tracks.forEach(track => track.stop());
-        video.srcObject = null;
+
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
     }
-    
-    // 更新按鈕狀態
+
+    video.srcObject = null;
+
     document.getElementById('startBtn').disabled = false;
     document.getElementById('stopBtn').disabled = true;
     document.getElementById('captureBtn').disabled = true;
-    
+
     console.log('✓ 攝影機已關閉');
 }
 
@@ -112,20 +113,16 @@ async function stopCamera() {
 // 實時預測 - 不斷更新攝影機中的辨識結果
 // ========================================
 async function startPrediction() {
-    // 只在攝影機開啟時執行預測
-    if (webcam && webcam.canvas) {
-        // 更新攝影機畫面
-        await webcam.update();
-        
-        // 執行預測
-        const prediction = await model.predict(webcam.canvas);
-        
-        // 顯示預測結果
+    if (!predicting) return;
+
+    const video = document.getElementById('webcam');
+
+    if (video.readyState === 4) {
+        const prediction = await model.predict(video);
         displayPredictions(prediction);
-        
-        // 使用 requestAnimationFrame 實現流暢的實時更新
-        requestAnimationFrame(startPrediction);
     }
+
+    requestAnimationFrame(startPrediction);
 }
 
 // ========================================
@@ -133,27 +130,31 @@ async function startPrediction() {
 // ========================================
 async function capturePhoto() {
     console.log('拍照中...');
-    
-    if (!webcam || !webcam.canvas) {
+
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('canvas');
+
+    if (!video.srcObject) {
         alert('❌ 攝影機未就緒');
         return;
     }
-    
-    // 獲取 canvas 並進行預測
-    const canvas = webcam.canvas;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
     const prediction = await model.predict(canvas);
-    
-    // 在結果區域顯示拍攝的照片
+
     const resultImage = document.getElementById('resultImage');
     resultImage.src = canvas.toDataURL();
     resultImage.style.display = 'block';
-    
-    // 隱藏"請拍照"的提示文字
+
     document.getElementById('noImageText').style.display = 'none';
-    
-    // 顯示完整的預測結果
+
     displayPredictions(prediction);
-    
+
     console.log('✓ 拍照完成，辨識結果已更新');
 }
 
