@@ -1,0 +1,341 @@
+/* ========================================
+   全局樣式設定
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* ========================================
+   容器和主體佈局
+   ======================================== */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* 標題區域 */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+/* 主要內容區域 */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+    flex: 1;
+}
+
+/* ========================================
+   攝影機區域樣式
+   ======================================== */
+.camera-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 影像容器 */
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    background: #f5f5f5;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid #ddd;
+}
+
+.video-container video,
+.video-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ========================================
+   按鈕樣式
+   ======================================== */
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    flex: 1;
+    min-width: 150px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* 主要按鈕 */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* 次要按鈕 */
+.btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+    border: 2px solid #ddd;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #e0e0e0;
+}
+
+/* 成功按鈕 */
+.btn-success {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+}
+
+/* 禁用按鈕 */
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   載入狀態
+   ======================================== */
+.loading {
+    text-align: center;
+    padding: 20px;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 5px;
+    color: #856404;
+}
+
+.loading p {
+    font-weight: 600;
+}
+
+/* ========================================
+   結果區域樣式
+   ======================================== */
+.results-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.results-container {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.results-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5em;
+}
+
+/* 結果圖片容器 */
+.result-image-container {
+    flex: 1;
+    margin-bottom: 20px;
+    text-align: center;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+}
+
+.result-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.no-image-text {
+    color: #999;
+    font-size: 1.1em;
+}
+
+/* 結果列表 */
+.results-list {
+    margin-bottom: 20px;
+}
+
+.result-item {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.result-item-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1.05em;
+}
+
+.result-item-bar {
+    background: #e0e0e0;
+    border-radius: 4px;
+    height: 25px;
+    overflow: hidden;
+    position: relative;
+}
+
+.result-item-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: width 0.3s ease;
+}
+
+/* 最高信心分數顯示 */
+.top-result {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    color: white;
+}
+
+.result-label {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.result-confidence {
+    font-size: 1.3em;
+}
+
+/* ========================================
+   頁腳
+   ======================================== */
+.footer {
+    background: #f5f5f5;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* ========================================
+   響應式設計 - 平板和手機
+   ======================================== */
+@media (max-width: 768px) {
+    /* 改變為單欄布局 */
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    /* 調整標題大小 */
+    .header h1 {
+        font-size: 2em;
+    }
+
+    /* 按鈕響應式 */
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 小螢幕調整 */
+    .container {
+        border-radius: 0;
+        min-height: auto;
+    }
+
+    .header {
+        padding: 20px;
+    }
+
+    .header h1 {
+        font-size: 1.5em;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .results-container {
+        padding: 15px;
+    }
+
+    .result-item-fill {
+        font-size: 0.8em;
+    }
+}

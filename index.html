@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>垃圾分類辨識 - Trash Classifier</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 標題 -->
+        <div class="header">
+            <h1>🗑️ 垃圾分類辨識系統</h1>
+            <p>使用攝影機即時辨識垃圾類型</p>
+        </div>
+
+        <!-- 主要內容區域 -->
+        <div class="main-content">
+            <!-- 左側：攝影機和控制按鈕 -->
+            <div class="camera-section">
+                <!-- 攝影機影像顯示 -->
+                <div class="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+
+                <!-- 控制按鈕 -->
+                <div class="button-group">
+                    <button id="startBtn" class="btn btn-primary" onclick="startCamera()">
+                        📹 開啟攝影機
+                    </button>
+                    <button id="stopBtn" class="btn btn-secondary" onclick="stopCamera()" disabled>
+                        ⏹️ 關閉攝影機
+                    </button>
+                    <button id="captureBtn" class="btn btn-success" onclick="capturePhoto()" disabled>
+                        📸 拍照辨識
+                    </button>
+                </div>
+
+                <!-- 載入狀態 -->
+                <div id="loading" class="loading" style="display: none;">
+                    <p>⏳ 模型載入中... 請稍候</p>
+                </div>
+            </div>
+
+            <!-- 右側：辨識結果 -->
+            <div class="results-section">
+                <div class="results-container">
+                    <h2>辨識結果</h2>
+                    
+                    <!-- 結果圖片預覽 -->
+                    <div class="result-image-container">
+                        <img id="resultImage" src="" alt="辨識結果圖片" style="display: none;">
+                        <p id="noImageText" class="no-image-text">請拍照進行辨識</p>
+                    </div>
+
+                    <!-- 分類結果 -->
+                    <div id="results" class="results-list" style="display: none;">
+                        <!-- 動態生成的結果會插入這裡 -->
+                    </div>
+
+                    <!-- 最高信心分數顯示 -->
+                    <div id="topResult" class="top-result" style="display: none;">
+                        <div class="result-label"></div>
+                        <div class="result-confidence"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁腳 -->
+        <div class="footer">
+            <p>使用 TensorFlow.js 和 Teachable Machine 技術</p>
+        </div>
+    </div>
+
+<!-- 載入 TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.0.0"></script>
+
+<!-- 載入 Teachable Machine Image Library -->
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+
+<!-- 載入自己的 JavaScript 程式碼 -->
+<script src="script.js"></script>
+</body>
+</html>
